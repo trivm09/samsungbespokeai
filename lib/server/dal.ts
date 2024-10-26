@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { getUserById } from "./db/user";
 import { getCustomerById } from "./db/customer";
 import { decrypt } from "./jwt";
-import { Cookie } from "lucide-react";
 
 // Verify the user's session
 export const verifySession = async () => {
