@@ -22,6 +22,8 @@ export const addClient = (
 export const notifyClients = async (id: string) => {
   console.log("Notifying clients", id);
   const customer = await getCustomerById(id);
+  console.log("Customer", customer);
+  console.log("Client", clients);
   clients.forEach((client) => {
     if (client.id === id) {
       console.log("Resolving client", id);
