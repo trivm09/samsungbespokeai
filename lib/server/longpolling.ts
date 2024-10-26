@@ -10,18 +10,17 @@ export const addClient = (
   resolve: (value: NextResponse) => void,
 ) => {
   clients.push({ id, resolve });
-  // Timeout after 10 seconds
+  // Timeout after 60 seconds
   setTimeout(() => {
     clients = clients.filter((client) => client.id !== id);
     resolve(new NextResponse(null, { status: 204 })); // Return empty response with status 204
-  }, 5000);
+  }, 60000);
 };
 
 export const notifyClients = async (id: string) => {
   const customer = await getCustomerById(id);
   clients.forEach((client) => {
     if (client.id === id) {
-      console.log("Notifying client...");
       client.resolve(NextResponse.json(customer, { status: 200 }));
     }
   });
