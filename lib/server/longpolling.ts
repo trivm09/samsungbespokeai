@@ -41,6 +41,10 @@ import Redis from "ioredis";
 
 const redis = new Redis(process.env.REDIS_URL || "", {
   maxRetriesPerRequest: 100,
+  retryStrategy(times) {
+    const delay = Math.min(times * 50, 2000);
+    return delay;
+  },
 });
 const resolveMap = new Map<string, (value: NextResponse) => void>();
 
