@@ -30,6 +30,8 @@ export const CustomerJourney = ({ id }: { id: string }) => {
     createAt: new Date(),
   });
 
+  console.log("run");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,19 +56,45 @@ export const CustomerJourney = ({ id }: { id: string }) => {
     fetchData();
   }, [id]);
 
+  // useEffect(() => {
+  //   console.log("Polling effect");
+  //   const poll = async () => {
+  //     console.log("Polling...");
+  //     try {
+  //       const response = await fetch(`/api/longpolling?id=${id}`);
+  //       if (response.status === 200) {
+  //         const data = await response.json();
+  //         console.log(data);
+  //         setCustomer(data);
+  //       }
+  //     } catch (error) {
+  //       console.error("Polling error:", error);
+  //     } finally {
+  //       // poll(); // Continue polling
+  //       setTimeout(poll, 5000);
+  //     }
+  //   };
+
+  //   poll();
+  // }, [id]);
+
   useEffect(() => {
+    console.log("Polling effect");
     const poll = async () => {
+      console.log("Polling...");
       try {
-        const response = await fetch(`/api/longpolling?id=${id}`);
+        const response = await axios.get(`/api/longpolling`, {
+          params: { id },
+        });
         if (response.status === 200) {
-          const data = await response.json();
+          const data = response.data;
           console.log(data);
           setCustomer(data);
         }
       } catch (error) {
         console.error("Polling error:", error);
       } finally {
-        poll(); // Continue polling
+        setTimeout(poll, 5000); // Continue polling after 5 seconds
       }
     };
 
