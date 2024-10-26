@@ -1,4 +1,3 @@
-// app/api/longpolling/route.ts
 import { NextResponse } from "next/server";
 import { addClient } from "@/lib/server/longpolling";
 

@@ -58,10 +58,8 @@ export const CustomerJourney = ({ id }: { id: string }) => {
     const poll = async () => {
       try {
         const response = await axios.get(`/api/longpolling?id=${id}`);
-        if (response.status === 200) {
-          const data = response.data;
-          setCustomer(data);
-        }
+        const data = response.data;
+        setCustomer(data);
       } catch (error) {
         console.error("Polling error:", error);
       } finally {
