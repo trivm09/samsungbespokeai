@@ -59,6 +59,7 @@ export const CustomerJourney = ({ id }: { id: string }) => {
       try {
         const response = await axios.get(`/api/longpolling?id=${id}`);
         const data = response.data;
+        console.log(response);
         console.log("Polling data:", data);
         setCustomer(data);
       } catch (error) {
