@@ -1,6 +1,14 @@
-// lib/server/longpolling.ts
 import { NextResponse } from "next/server";
 import { getCustomerById } from "@/lib/server/db/customer";
+
+// Define a global variable for clients
+interface GlobalClients {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  clients: any[];
+}
+
+(globalThis as unknown as GlobalClients).clients =
+  (globalThis as unknown as GlobalClients).clients || [];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let clients: any[] = [];
@@ -18,7 +26,7 @@ export const addClient = (
     clients = clients.filter((client) => client.id !== id);
     console.log("Clients after timeout:", clients);
     resolve(new NextResponse(null, { status: 204 })); // Return empty response with status 204
-  }, 60000);
+  }, 10000);
 };
 
 export const notifyClients = async (id: string) => {
