@@ -16,7 +16,7 @@ export const addClient = (
     console.log("Timing out client", id);
     clients = clients.filter((client) => client.id !== id);
     resolve(new NextResponse(null, { status: 204 })); // Return empty response with status 204
-  }, 10000);
+  }, 15000);
 };
 
 export const notifyClients = async (id: string) => {
