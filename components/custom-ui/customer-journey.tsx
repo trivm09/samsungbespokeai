@@ -13,6 +13,7 @@ import star from "@/assets/images/star.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Customer } from "@prisma/client";
+import { headers } from "next/headers";
 
 export const CustomerJourney = ({ id }: { id: string }) => {
   const [customer, setCustomer] = useState<Customer>({
@@ -79,16 +80,14 @@ export const CustomerJourney = ({ id }: { id: string }) => {
   // }, [id]);
 
   useEffect(() => {
-    console.log("Polling effect");
     const poll = async () => {
-      console.log("Polling...");
       try {
-        const response = await axios.get(
-          `https://samsungbespokeai.vercel.app/api/longpolling`,
-          {
-            params: { id },
+        const response = await axios.get(`/api/longpolling`, {
+          params: { id },
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+        });
         if (response.status === 200) {
           const data = response.data;
           console.log(data);

@@ -10,13 +10,11 @@ export const addClient = (
   resolve: (value: NextResponse) => void,
 ) => {
   clients.push({ id, resolve });
-
   // Timeout after 10 seconds
   setTimeout(() => {
     clients = clients.filter((client) => client.id !== id);
-    console.log("clients", clients);
     resolve(new NextResponse(null, { status: 204 })); // Return empty response with status 204
-  }, 10000);
+  }, 5000);
 };
 
 export const notifyClients = async (id: string) => {
