@@ -60,7 +60,6 @@ export const CustomerJourney = ({ id }: { id: string }) => {
         const response = await fetch(`/api/longpolling?id=${id}`);
         if (response.status === 200) {
           const data = await response.json();
-          console.log("Polling data:", data);
           setCustomer(data);
         }
       } catch (error) {

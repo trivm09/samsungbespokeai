@@ -11,13 +11,13 @@ import Camera from "./camera";
 
 export const Staff = ({ journey }: { journey: string }) => {
   const [id, setId] = useState("");
-
   useEffect(() => {
     const Scan = async () => {
-      const urlEndpoint = "api/customer";
+      console.log(journey);
+      const urlEndpoint = "/api/customer/";
 
       try {
-        await axios.post(
+        const response = await axios.put(
           urlEndpoint,
           { id: id, journeyField: journey, journeyValue: true },
           {
@@ -27,6 +27,8 @@ export const Staff = ({ journey }: { journey: string }) => {
             },
           },
         );
+
+        console.log(response.data);
       } catch (err) {
         console.log(err);
       }
