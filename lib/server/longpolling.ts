@@ -21,6 +21,7 @@ export const notifyClients = async (id: string) => {
   const customer = await getCustomerById(id);
   clients.forEach((client) => {
     if (client.id === id) {
+      console.log("Notifying client...");
       client.resolve(NextResponse.json(customer, { status: 200 }));
     }
   });

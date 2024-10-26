@@ -13,7 +13,6 @@ import star from "@/assets/images/star.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Customer } from "@prisma/client";
-import { headers } from "next/headers";
 
 export const CustomerJourney = ({ id }: { id: string }) => {
   const [customer, setCustomer] = useState<Customer>({
