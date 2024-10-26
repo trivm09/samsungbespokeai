@@ -11,7 +11,10 @@ interface GlobalClients {
   (globalThis as unknown as GlobalClients).clients || [];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-let clients: any[] = [];
+// let clients: any[] = [];
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let clients = (globalThis as unknown as GlobalClients).clients;
 
 export const addClient = (
   id: string,
