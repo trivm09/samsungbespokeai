@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "Customer" ALTER COLUMN "otp" SET DEFAULT '9999',
+ALTER COLUMN "journey1" SET DEFAULT false,
+ALTER COLUMN "journey2" SET DEFAULT false,
+ALTER COLUMN "journey3" SET DEFAULT false,
+ALTER COLUMN "journey4" SET DEFAULT false,
+ALTER COLUMN "gift1" SET DEFAULT false,
+ALTER COLUMN "gift2" SET DEFAULT false;
