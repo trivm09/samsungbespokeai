@@ -6,6 +6,8 @@ export const GET = async (req: Request): Promise<NextResponse> => {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
 
+  console.log("Longpolling id:", id);
+
   if (!id) {
     return NextResponse.json({ error: "Missing id" }, { status: 400 });
   }
