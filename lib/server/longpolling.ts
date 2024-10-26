@@ -57,6 +57,15 @@ export const addClient = async (
   await redis.set(clientKey, id, "EX", 10); // Set with expiration of 10 seconds
   resolveMap.set(id, resolve);
   console.log("Current clients:", await redis.keys("client:*"));
+
+  // Timeout after 10 seconds
+  setTimeout(() => {
+    console.log("Timing out client", id);
+    resolveMap.delete(id);
+    redis.del(clientKey);
+    console.log("Clients after timeout:", Array.from(resolveMap.keys()));
+    resolve(new NextResponse(null, { status: 204 })); // Return empty response with status 204
+  }, 10000);
 };
 
 export const notifyClients = async (id: string) => {
@@ -77,5 +86,5 @@ export const notifyClients = async (id: string) => {
   } else {
     console.log("No client data found for key:", clientKey);
   }
-  console.log("Clients after notification:", await redis.keys("client:*"));
+  console.log("Clients after notification:", Array.from(resolveMap.keys()));
 };
