@@ -29,8 +29,8 @@ export default function Camera({
           video: {
             width: 250,
             height: 250,
-            // facingMode: { exact: "environment" },
-            facingMode: "user",
+            facingMode: { exact: "environment" },
+            // facingMode: "user",
           },
         });
 
