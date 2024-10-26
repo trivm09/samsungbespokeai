@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { clientManager } from "@/lib/server/longpolling";
+import { addClient } from "@/lib/server/longpolling";
 
 export const GET = async (req: Request): Promise<NextResponse> => {
   const { searchParams } = new URL(req.url);
@@ -9,11 +9,7 @@ export const GET = async (req: Request): Promise<NextResponse> => {
     return NextResponse.json({ error: "Missing id" }, { status: 400 });
   }
 
-  // return new Promise((resolve) => {
-  //   addClient(id, resolve);
-  // });
-
   return new Promise((resolve) => {
-    clientManager.addClient(id, resolve);
+    addClient(id, resolve);
   });
 };
