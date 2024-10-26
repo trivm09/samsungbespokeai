@@ -1,7 +1,5 @@
-import { NextResponse } from "next/server";
-import { getCustomerById } from "@/lib/server/db/customer";
-import Redis from "ioredis";
-import { EventEmitter } from "events";
+// import { NextResponse } from "next/server";
+// import { getCustomerById } from "@/lib/server/db/customer";
 
 // // eslint-disable-next-line @typescript-eslint/no-explicit-any
 // let clients: any[] = [];
@@ -37,46 +35,41 @@ import { EventEmitter } from "events";
 //   console.log("Clients after notification:", clients);
 // };
 
+import { NextResponse } from "next/server";
+import { getCustomerById } from "@/lib/server/db/customer";
+import Redis from "ioredis";
+
 const redis = new Redis(process.env.REDIS_URL || "");
-const eventEmitter = new EventEmitter();
+const resolveMap = new Map<string, (value: NextResponse) => void>();
 
 export const addClient = async (
   id: string,
   resolve: (value: NextResponse) => void,
 ) => {
   console.log("Adding client", id);
-  await redis.set(`client:${id}`, JSON.stringify({ id }));
-  eventEmitter.once(`notify:${id}`, resolve);
+  const clientKey = `client:${id}`;
+  await redis.set(clientKey, id, "EX", 10); // Set with expiration of 10 seconds
+  resolveMap.set(id, resolve);
   console.log("Current clients:", await redis.keys("client:*"));
-
-  // Timeout after 10 seconds
-  setTimeout(async () => {
-    console.log("Timing out client", id);
-    await redis.del(`client:${id}`);
-    console.log("Clients after timeout:", await redis.keys("client:*"));
-    eventEmitter.emit(`notify:${id}`, new NextResponse(null, { status: 204 })); // Return empty response with status 204
-  }, 10000);
 };
 
 export const notifyClients = async (id: string) => {
   console.log("Notifying clients", id);
   const customer = await getCustomerById(id);
   console.log("Customer", customer);
-  const clientKeys = await redis.keys(`client:${id}`);
-  console.log("Clients before notification:", clientKeys);
-
-  for (const key of clientKeys) {
-    const clientData = await redis.get(key);
-    if (clientData) {
-      JSON.parse(clientData);
-      console.log("Resolving client", id);
-      eventEmitter.emit(
-        `notify:${id}`,
-        NextResponse.json(customer, { status: 200 }),
-      );
+  const clientKey = `client:${id}`;
+  const clientId = await redis.get(clientKey);
+  console.log("Retrieved client ID:", clientId);
+  if (clientId) {
+    const resolve = resolveMap.get(clientId);
+    if (resolve) {
+      console.log("Resolving client", clientId);
+      resolve(NextResponse.json(customer, { status: 200 }));
+      resolveMap.delete(clientId);
     }
+    await redis.del(clientKey);
+  } else {
+    console.log("No client data found for key:", clientKey);
   }
-
-  await redis.del(`client:${id}`);
   console.log("Clients after notification:", await redis.keys("client:*"));
 };
