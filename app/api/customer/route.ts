@@ -4,7 +4,7 @@ import {
 } from "@/lib/server/db/customer";
 import { verifyToken } from "@/lib/server/dal";
 import { NextResponse } from "next/server";
-import { notifyClients } from "../longpolling/route";
+import { notifyClients } from "@/lib/server/longpolling";
 
 async function verifyAdminToken(req: Request): Promise<NextResponse | null> {
   const token = req.headers.get("Authorization");
