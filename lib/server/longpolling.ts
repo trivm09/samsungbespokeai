@@ -9,6 +9,7 @@ export const addClient = (
   id: string,
   resolve: (value: NextResponse) => void,
 ) => {
+  console.log("Adding client", id);
   clients.push({ id, resolve });
   // Timeout after 10 seconds
   setTimeout(() => {
@@ -18,6 +19,7 @@ export const addClient = (
 };
 
 export const notifyClients = async (id: string) => {
+  console.log("Notifying clients", id);
   const customer = await getCustomerById(id);
   clients.forEach((client) => {
     if (client.id === id) {
