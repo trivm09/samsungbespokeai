@@ -59,8 +59,18 @@ export const CustomerJourney = ({ id }: { id: string }) => {
       try {
         const response = await axios.get(`/api/longpolling?id=${id}`);
         const data = response.data;
-        console.log(response);
-        setCustomer(data);
+
+        if (response.status === 200) {
+          // setCustomer(data);
+          setCustomer((prevCustomer) => ({
+            ...prevCustomer,
+            ...data, // Giả sử dữ liệu nhận được chứa tất cả các trường customer
+          }));
+        }
+
+        if (response.status === 408) {
+          console.error("Timeout");
+        }
       } catch (error) {
         console.error("Polling error:", error);
       } finally {

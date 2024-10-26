@@ -1,6 +1,6 @@
-// import { NextResponse } from "next/server";
-// import { getCustomerById } from "@/lib/server/db/customer";
-
+import { NextResponse } from "next/server";
+import { getCustomerById } from "@/lib/server/db/customer";
+import redis from "../redis";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 // let clients: any[] = [];
 
@@ -36,41 +36,20 @@
 //   console.log("Clients after notification:", clients);
 // };
 
-import { NextResponse } from "next/server";
-import { getCustomerById } from "@/lib/server/db/customer";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let clients: any[] = [];
-
-// Simple in-memory cache
-const cache = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  set: (key: string, value: any) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (global as any)[key] = value;
-  },
-  get: (key: string) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (global as any)[key];
-  },
-};
-
-export const addClient = (
+export const addClient = async (
   id: string,
   resolve: (value: NextResponse) => void,
 ) => {
   console.log("Adding client", id);
 
-  clients.push({ id, resolve });
-  cache.set("clients", clients);
-  console.log("Current clients:", clients);
-  // Timeout after 10 seconds
-  setTimeout(() => {
+  // Lưu client vào Redis với expiration
+  await redis.setex(`client:${id}`, 10, JSON.stringify({ id }));
+
+  // Timeout sau 10 giây
+  setTimeout(async () => {
     console.log("Timing out client", id);
-    clients = clients.filter((client) => client.id !== id);
-    cache.set("clients", clients);
-    console.log("Clients after timeout:", clients);
-    resolve(new NextResponse(null, { status: 204 })); // Return empty response with status 204
+    await redis.del(`client:${id}`);
+    resolve(new NextResponse(null, { status: 204 })); // Trả về response 204
   }, 10000);
 };
 
@@ -78,15 +57,16 @@ export const notifyClients = async (id: string) => {
   console.log("Notifying clients", id);
   const customer = await getCustomerById(id);
   console.log("Customer", customer);
-  clients = cache.get("clients") || [];
-  console.log("Clients before notification:", clients);
-  clients.forEach((client) => {
-    if (client.id === id) {
-      console.log("Resolving client", id);
-      client.resolve(NextResponse.json(customer, { status: 200 }));
-    }
-  });
-  clients = clients.filter((client) => client.id !== id);
-  cache.set("clients", clients);
-  console.log("Clients after notification:", clients);
+
+  // Lấy dữ liệu client từ Redis
+  const clientData = await redis.get(`client:${id}`);
+
+  if (clientData) {
+    console.log("Resolving client", id);
+    // Trả về dữ liệu cho client
+    await redis.del(`client:${id}`); // Xóa client khỏi Redis sau khi thông báo
+    return NextResponse.json(customer, { status: 200 });
+  } else {
+    console.log("Client not found or timed out");
+  }
 };
