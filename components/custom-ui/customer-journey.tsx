@@ -95,7 +95,7 @@ export const CustomerJourney = ({ id }: { id: string }) => {
       } catch (error) {
         console.error("Polling error:", error);
       } finally {
-        poll(); // Continue polling after 5 seconds
+        setTimeout(poll, 15000); // Continue polling after 15 seconds
       }
     };
 
