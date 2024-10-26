@@ -83,9 +83,12 @@ export const CustomerJourney = ({ id }: { id: string }) => {
     const poll = async () => {
       console.log("Polling...");
       try {
-        const response = await axios.get(`/api/longpolling`, {
-          params: { id },
-        });
+        const response = await axios.get(
+          `https://samsungbespokeai.vercel.app/api/longpolling`,
+          {
+            params: { id },
+          },
+        );
         if (response.status === 200) {
           const data = response.data;
           console.log(data);
