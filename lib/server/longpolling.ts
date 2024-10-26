@@ -39,7 +39,9 @@ import { NextResponse } from "next/server";
 import { getCustomerById } from "@/lib/server/db/customer";
 import Redis from "ioredis";
 
-const redis = new Redis(process.env.REDIS_URL || "");
+const redis = new Redis(process.env.REDIS_URL || "", {
+  maxRetriesPerRequest: 100,
+});
 const resolveMap = new Map<string, (value: NextResponse) => void>();
 
 export const addClient = async (
