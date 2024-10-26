@@ -41,14 +41,19 @@ class ClientManager {
 
   addClient(id: string, resolve: (value: NextResponse) => void) {
     console.log("Adding client", id);
-    this.clients.push({ id, resolve });
+    this.clients.push({ id, resolve, notified: false });
     console.log("Current clients:", this.clients);
     // Timeout after 10 seconds
     setTimeout(() => {
       console.log("Timing out client", id);
-      this.clients = this.clients.filter((client) => client.id !== id);
+      this.clients = this.clients.filter((client) => {
+        if (client.id === id && !client.notified) {
+          resolve(new NextResponse(null, { status: 204 })); // Return empty response with status 204
+          return false;
+        }
+        return true;
+      });
       console.log("Clients after timeout:", this.clients);
-      resolve(new NextResponse(null, { status: 204 })); // Return empty response with status 204
     }, 10000);
   }
 
@@ -60,6 +65,7 @@ class ClientManager {
     this.clients.forEach((client) => {
       if (client.id === id) {
         console.log("Resolving client", id);
+        client.notified = true;
         client.resolve(NextResponse.json(customer, { status: 200 }));
       }
     });
