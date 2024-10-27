@@ -73,15 +73,17 @@ export default function Page() {
             </div>
           </Link>
           {/* 5th item */}
-          <div className="col-span-2 flex justify-center">
-            <div className="relative flex h-32 w-44 flex-col items-center justify-around overflow-hidden rounded-xl border-[1px] border-white p-2 drop-shadow-md active:scale-95">
-              <BackgroundContainer />
-              <h1 className="select-none text-xs text-black">
-                Triển lãm nhà đẹp​
-              </h1>
-              <HomeImg />
+          <Link href="/cms/gift">
+            <div className="col-span-2 flex justify-center">
+              <div className="relative flex h-32 w-44 flex-col items-center justify-around overflow-hidden rounded-xl border-[1px] border-white p-2 drop-shadow-md active:scale-95">
+                <BackgroundContainer />
+                <h1 className="select-none text-xs text-black">
+                  Triển lãm nhà đẹp​
+                </h1>
+                <HomeImg />
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
     </section>
