@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+// import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import jsqr from "jsqr";
 
@@ -9,13 +10,13 @@ export default function Camera({
 }: {
   setQrcode: (qrcode: string) => void;
 }) {
-  const [detectedQr, setDetectedQr] = useState(false);
+  // const [detectedQr, setDetectedQr] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lastDetectedQr = useRef<string>("");
 
-  const lineColor = detectedQr ? "#a3e635" : "white";
+  // const lineColor = detectedQr ? "#a3e635" : "white";
 
   // const { setQrcode } = useCheckinContext();
 
@@ -27,10 +28,10 @@ export default function Camera({
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            width: 250,
-            height: 250,
-            facingMode: { exact: "environment" },
-            // facingMode: "user",
+            width: 280,
+            height: 280,
+            // facingMode: { exact: "environment" },
+            facingMode: "user",
           },
         });
 
@@ -61,8 +62,8 @@ export default function Camera({
 
     if (!video || !canvas) return;
 
-    canvas.width = 250;
-    canvas.height = 250;
+    canvas.width = 280;
+    canvas.height = 280;
 
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
@@ -76,7 +77,7 @@ export default function Camera({
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const code = jsqr(imageData.data, imageData.width, imageData.height);
 
-      setDetectedQr(!!code);
+      // setDetectedQr(!!code);
 
       if (code && code.data !== lastDetectedQr.current) {
         lastDetectedQr.current = code.data;
@@ -96,9 +97,9 @@ export default function Camera({
 
   return (
     <div className="flex-col items-center gap-4">
-      <div className="relative h-[250px] w-[250px] overflow-hidden rounded-xl">
+      <div className="relative h-[280px] w-[280px] overflow-hidden rounded-xl">
         <video id="video" ref={videoRef} autoPlay playsInline></video>
-        <div className="absolute left-[25px] top-[25px] z-10 h-[200px] w-[200px]">
+        {/* <div className="absolute left-[25px] top-[25px] z-10 h-[200px] w-[200px]">
           <svg width="250" height="250" xmlns="http://www.w3.org/2000/svg">
             <line
               x1="10"
@@ -168,7 +169,7 @@ export default function Camera({
               strokeWidth="2"
             />
           </svg>
-        </div>
+        </div> */}
         <canvas className="hidden" ref={canvasRef}></canvas>
       </div>
     </div>

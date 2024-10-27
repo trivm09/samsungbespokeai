@@ -55,7 +55,7 @@ export const PUT = async (req: Request): Promise<NextResponse> => {
   if (isAuth) return isAuth;
 
   const { id, journeyField, journeyValue } = await req.json();
-  console.log(id, journeyField, journeyValue);
+
   try {
     switch (journeyField) {
       case "journey1":

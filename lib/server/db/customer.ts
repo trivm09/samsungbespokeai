@@ -49,3 +49,18 @@ export const updateCustomerJourney = async (
     },
   });
 };
+
+export const updateCustomerGift = async (
+  id: string,
+  giftField: string,
+  giftValue: boolean,
+): Promise<Customer | null> => {
+  return await prisma.customer.update({
+    where: {
+      id: id,
+    },
+    data: {
+      [giftField]: giftValue,
+    },
+  });
+};

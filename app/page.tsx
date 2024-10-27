@@ -14,7 +14,7 @@ export default function Home() {
             <Logo />
           </div>
         </div>
-        <div className="flex w-full max-w-[425px] flex-grow flex-col items-center px-9 pt-10">
+        <div className="flex w-full max-w-[425px] flex-grow flex-col items-center gap-2 px-9 pt-10">
           <WelcomeText />
           <CustomerForm />
           <Gift />

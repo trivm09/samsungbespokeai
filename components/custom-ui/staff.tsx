@@ -8,12 +8,13 @@ import logo from "@/assets/images/logo.png";
 import Image from "next/image";
 import axios from "axios";
 import Camera from "./camera";
+import { BackgroundContainer } from "../images-ui/background-container";
 
 export const Staff = ({ journey }: { journey: string }) => {
   const [id, setId] = useState("");
+
   useEffect(() => {
     const Scan = async () => {
-      console.log(journey);
       const urlEndpoint = "/api/customer/";
 
       try {
@@ -27,9 +28,10 @@ export const Staff = ({ journey }: { journey: string }) => {
             },
           },
         );
-
+        alert("Quét mã thành công");
         console.log(response.data);
       } catch (err) {
+        alert("Quét mã thất bại");
         console.log(err);
       }
     };
@@ -58,13 +60,15 @@ export const Staff = ({ journey }: { journey: string }) => {
         </div>
       </div>
 
-      <div className="flex w-full max-w-[425px] flex-grow flex-col items-center gap-2 px-9 pt-10">
+      <div className="relative flex w-full max-w-[425px] flex-grow flex-col items-center gap-2 px-9 pt-10">
         <h1 className="text-nowrap text-4xl text-black">QUÉT QR ​</h1>
         <h1 className="text-nowrap text-xl text-black">
           ĐỂ HOÀN THÀNH KHU VỰC
         </h1>
-
-        <Camera setQrcode={setId} />
+        <div className="relative p-2">
+          <BackgroundContainer />
+          <Camera setQrcode={setId} />
+        </div>
       </div>
     </section>
   );
