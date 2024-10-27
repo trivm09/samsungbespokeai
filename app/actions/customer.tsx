@@ -9,7 +9,7 @@ import {
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-// import axios from "axios";
+import axios from "axios";
 import { createSession } from "@/lib/server/session";
 import { decrypt } from "@/lib/server/jwt";
 
@@ -40,38 +40,38 @@ export async function customerRegistration(
   }
 
   // Production
-  // try {
-  //   // Send OTP to the customer's phone number
-  //   const res = await axios.post(
-  //     "https://samsung-otp.codev.vn/api/send-otp",
-  //     {
-  //       token: process.env.OTP_TOKEN,
-  //       phone: phone,
-  //     },
-  //     { headers: { "Content-Type": "application/json" } },
-  //   );
-  //   // If OTP sending fails, return an error message
-  //   if (!res.data.status) {
-  //     return {
-  //       message: "Gửi mã OTP thất bại",
-  //     };
-  //   }
-  //   // Extract OTP from the response
-  //   const otp = res.data.otp;
-  //   // Create a new customer with the provided details and OTP
-  //   const newCustomer = await createCustomer(name, phone, email, otp);
-  //   await createSession(newCustomer.id);
-  // } catch (err) {
-  //   console.error(err);
-  //   return {
-  //     message: "Đã có lỗi xảy ra, vui lòng thử lại sau",
-  //   };
-  // }
+  try {
+    // Send OTP to the customer's phone number
+    const res = await axios.post(
+      "https://samsung-otp.codev.vn/api/send-otp",
+      {
+        token: process.env.OTP_TOKEN,
+        phone: phone,
+      },
+      { headers: { "Content-Type": "application/json" } },
+    );
+    // If OTP sending fails, return an error message
+    if (!res.data.status) {
+      return {
+        message: "Gửi mã OTP thất bại",
+      };
+    }
+    // Extract OTP from the response
+    const otp = res.data.otp;
+    // Create a new customer with the provided details and OTP
+    const newCustomer = await createCustomer(name, phone, email, otp);
+    await createSession(newCustomer.id);
+  } catch (err) {
+    console.error(err);
+    return {
+      message: "Đã có lỗi xảy ra, vui lòng thử lại sau",
+    };
+  }
 
   // Development
   // Create a new customer with the provided details and OTP
-  const newCustomer = await createCustomer(name, phone, email, "9999");
-  await createSession(newCustomer.id);
+  // const newCustomer = await createCustomer(name, phone, email, "9999");
+  // await createSession(newCustomer.id);
 
   redirect("/customer");
 }
