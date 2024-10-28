@@ -4,7 +4,7 @@ import {
 } from "@/lib/server/db/customer";
 import { verifyToken } from "@/lib/server/dal";
 import { NextResponse } from "next/server";
-import redis from "@/lib/redis";
+// import redis from "@/lib/redis";
 
 async function verifyAdminToken(req: Request): Promise<NextResponse | null> {
   const token = req.headers.get("Authorization");
@@ -74,11 +74,11 @@ export const PUT = async (req: Request): Promise<NextResponse> => {
         break;
     }
 
-    // Notify clients
-    await redis.publish(
-      id,
-      JSON.stringify({ id, [journeyField]: journeyValue }),
-    );
+    // // Notify clients
+    // await redis.publish(
+    //   id,
+    //   JSON.stringify({ id, [journeyField]: journeyValue }),
+    // );
   } catch (err) {
     console.log(err);
     return NextResponse.json({ error: "Update failed" }, { status: 400 });

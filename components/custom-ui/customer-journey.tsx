@@ -54,32 +54,32 @@ export const CustomerJourney = ({ id }: { id: string }) => {
     fetchData();
   }, [id]);
 
-  useEffect(() => {
-    const poll = async () => {
-      try {
-        const response = await axios.get(`/api/longpolling?id=${id}`);
-        const data = response.data;
+  // useEffect(() => {
+  //   const poll = async () => {
+  //     try {
+  //       const response = await axios.get(`/api/longpolling?id=${id}`);
+  //       const data = response.data;
 
-        if (response.status === 200) {
-          // setCustomer(data);
-          setCustomer((prevCustomer) => ({
-            ...prevCustomer,
-            ...data, // Giả sử dữ liệu nhận được chứa tất cả các trường customer
-          }));
-        }
+  //       if (response.status === 200) {
+  //         // setCustomer(data);
+  //         setCustomer((prevCustomer) => ({
+  //           ...prevCustomer,
+  //           ...data, // Giả sử dữ liệu nhận được chứa tất cả các trường customer
+  //         }));
+  //       }
 
-        if (response.status === 408) {
-          console.error("Timeout");
-        }
-      } catch (error) {
-        console.error("Polling error:", error);
-      } finally {
-        poll(); // Continue polling after 15 seconds
-      }
-    };
+  //       if (response.status === 408) {
+  //         console.error("Timeout");
+  //       }
+  //     } catch (error) {
+  //       console.error("Polling error:", error);
+  //     } finally {
+  //       poll(); // Continue polling after 15 seconds
+  //     }
+  //   };
 
-    poll();
-  }, [id]);
+  //   poll();
+  // }, [id]);
 
   return (
     <>
