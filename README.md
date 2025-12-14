@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Samsung Bespoke AI - Hệ Thống Đăng Ký Sự Kiện
 
-## Getting Started
+Hệ thống đăng ký và quản lý khách hàng tham gia sự kiện Samsung Bespoke AI.
 
-First, run the development server:
+## Tính năng chính
+
+- **Đăng ký khách hàng**: Đăng ký thông tin và xác thực OTP qua SMS
+- **Theo dõi hành trình**: Theo dõi khách hàng qua 4 khu vực triển lãm
+- **Quản lý quà tặng**: Đổi và nhận quà tặng tại sự kiện
+- **CMS Nhân viên**: Giao diện cho nhân viên quét QR code check-in
+- **Bảng điều khiển Admin**: Quản lý và xem thống kê khách hàng
+
+## Công nghệ sử dụng
+
+- **Framework**: Next.js 14 (App Router)
+- **Cơ sở dữ liệu**: PostgreSQL + Prisma ORM
+- **Giao diện**: Tailwind CSS + Radix UI
+- **Xác thực**: JWT + Cookies
+- **Form**: React Hook Form + Zod
+
+## Hướng dẫn cài đặt
 
 ```bash
+# Clone repo
+git clone https://github.com/trivm09/samsungbespokeai.git
+cd samsungbespokeai
+
+# Cài đặt dependencies
+npm install
+
+# Tạo file .env từ template
+cp .env.example .env
+
+# Chạy migration và seed dữ liệu mẫu
+npx prisma migrate dev
+npx prisma db seed
+
+# Khởi động server phát triển
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Cấu hình biến môi trường
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+POSTGRES_PRISMA_URL=postgresql://...
+POSTGRES_URL_NON_POOLING=postgresql://...
+OTP_TOKEN=your_otp_token
+JWT_SECRET=your_jwt_secret
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Cấu trúc thư mục
 
-## Learn More
+```
+├── app/
+│   ├── admin/          # Trang quản trị
+│   ├── auth/           # Đăng nhập/xác thực
+│   ├── cms/            # CMS nhân viên (quét QR)
+│   ├── customer/       # Hành trình khách hàng
+│   ├── api/            # API routes
+│   └── actions/        # Server actions
+├── components/
+│   ├── custom-ui/      # Components tùy chỉnh
+│   └── images-ui/      # Components hình ảnh
+├── lib/
+│   ├── client/         # Tiện ích phía client
+│   └── server/         # Tiện ích phía server
+└── prisma/
+    └── schema.prisma   # Schema cơ sở dữ liệu
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Ảnh chụp màn hình
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Trang đăng ký
+![Đăng ký](./screenshots/registration.png)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Hành trình khách hàng
+![Hành trình](./screenshots/journey.png)
+![Hành trình 1](./screenshots/journey-1.png)
+![Hành trình 2](./screenshots/journey-2.png)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### CMS Nhân viên
+![CMS](./screenshots/cms.png)
+![CMS 2](./screenshots/cms-2.png)

@@ -16,10 +16,10 @@ import { createSession } from "../../lib/server/session";
 import { redirect } from "next/navigation";
 
 const handleRedirect = (role: string) => {
-  if (role !== "admin") {
-    redirect("/");
+  if (role === "admin") {
+    redirect("/admin");
   }
-  redirect("/admin");
+  redirect("/cms");
 };
 
 export async function signup(_: SignupState, formData: FormData) {
